@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package inventory;
+
+// Specify the Go package for the generated code
+option go_package = "github.com/abhivaikar/playpi/services/grpc/inventory_management/pb/inventory";
+
+// Define the InventoryService
+service InventoryService {
+    rpc GetItem(GetItemRequest) returns (GetItemResponse);
+    rpc ListItems(ListItemsRequest) returns (ListItemsResponse);
+    rpc AddItem(AddItemRequest) returns (AddItemResponse);
+    rpc UpdateItem(UpdateItemRequest) returns (UpdateItemResponse);
+    rpc DeleteItem(DeleteItemRequest) returns (DeleteItemResponse);
+}
+
+// Messages for GetItem
+message GetItemRequest {
+    int32 id = 1;
+}
+
+message GetItemResponse {
+    Item item = 1;
+}
+
+// Messages for ListItems
+message ListItemsRequest {}
+
+message ListItemsResponse {
+    repeated Item items = 1;
+}
+
+// Messages for AddItem
+message AddItemRequest {
+    string name = 1;
+    string description = 2;
+    float price = 3;
+    int32 quantity = 4;
+}
+
+message AddItemResponse {
+    Item item = 1;
+}
+
+// Messages for UpdateItem
+message UpdateItemRequest {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+    int32 quantity = 5;
+}
+
+message UpdateItemResponse {
+    Item item = 1;
+}
+
+// Messages for DeleteItem
+message DeleteItemRequest {
+    int32 id = 1;
+}
+
+message DeleteItemResponse {
+    bool success = 1;
+}
+
+// Message for an Item
+message Item {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+    int32 quantity = 5;
+}
