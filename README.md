@@ -124,7 +124,7 @@ Payload:
 }
 ```
 
-### RESTful API - Task Management
+### **RESTful API - Task Management**
 Manage tasks with fields such as title, description, due date, and status. Tasks can be marked as overdue based on their due date.
 
 #### Create a new task
@@ -172,7 +172,7 @@ HTTP Method: `DELETE`
 URL: `/tasks/{id}`
 
 
-### gRPC API - Inventory Management
+### **gRPC API - Inventory Management**
 - Full CRUD support for managing inventory.
 - Proto file for generating client can be found in `services/grpc/inventory_management/pb/inventory.proto`
 
@@ -216,7 +216,7 @@ Payload
 }
 ```
 
-### gRPC API - User Registration and Sign-In
+### **gRPC API - User Registration and Sign-In**
 - Register a new user, sign in with a username and password, view profiles, and update/delete account details.
 - Proto file for generating client can be found in `services/grpc/user_registration/pb/user.proto`
 
@@ -273,7 +273,7 @@ Payload:
 }
 ```
 
-### GraphQL API - Inventory management
+### **GraphQL API - Inventory management**
 Query and mutate inventory data with a flexible schema. Example: Fetch a list of items, retrieve specific details, or update inventory.
 
 #### Get all items
@@ -328,7 +328,7 @@ deleteItem(id: 2)
 }
 ```
 
-### WebSocket API - Inventory Management
+### **WebSocket API - Inventory Management**
 Real-time updates to all connected clients when inventory changes occur.
 
 #### Add item broadcast
@@ -372,7 +372,7 @@ Real-time updates to all connected clients when inventory changes occur.
 }
 ```
 
-### WebSocket API - Live Chat
+### **WebSocket API - Live Chat**
 Multi-user chat functionality with join/leave notifications and private messaging.
 
 #### Join a chat
