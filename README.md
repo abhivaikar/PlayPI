@@ -1,7 +1,9 @@
 
 # **PlayPI - API Testing Playground**
 
-PlayPI (pronounced as Play-P-I, similar to API) is an open-source, simple, and local API playground that allows software engineers to test and experiment with various types of APIs. It is designed for hands-on learning and testing without requiring an internet connection. With PlayPI, you can practice API testing across multiple technologies and protocols, including RESTful, gRPC, GraphQL, and WebSocket. You can also use this playground if you are conducting a hands-on API testing workshop or bootcamp.
+PlayPI (pronounced as Play-P-I, similar to API) is an open-source, simple, and local API playground that allows software engineers to test and experiment with various types of APIs. It is designed for hands-on learning and testing without requiring an internet connection or complex setup. 
+
+With PlayPI, you can practice API testing across multiple technologies and protocols, including RESTful, gRPC, GraphQL, and WebSocket (and more to come). You can also use this playground if you are conducting a hands-on API testing workshop or bootcamp.
 
 ----------
 
@@ -9,7 +11,7 @@ PlayPI (pronounced as Play-P-I, similar to API) is an open-source, simple, and l
 
 PlayPI stands out as a versatile, multi-protocol API playground:
 
--   **Multiple API protocols**: Includes RESTful, gRPC, GraphQL, and WebSocket APIs.
+-   **Multiple API protocols**: Includes RESTful, gRPC, GraphQL, and WebSocket APIs (and more to come).
 -   **Realistic use cases**: Each API implements meaningful functionalities such as inventory management, task management, user registration, and live chat.
 -   **Offline testing**: No internet connection is required; all APIs run locally.
 -   **Ease of use**: Simple CLI and Docker-based installation options make it beginner-friendly.
