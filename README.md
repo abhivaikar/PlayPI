@@ -276,15 +276,15 @@ Payload:
 Query and mutate inventory data with a flexible schema. Example: Fetch a list of items, retrieve specific details, or update inventory.
 
 #### Get all items
-```json
+```
 {
-items {
-id
-name
-description
-price
-quantity
- }
+  items {
+    id
+    name
+    description
+    price
+    quantity
+  }
 }
 ```
 #### Get item by item id
