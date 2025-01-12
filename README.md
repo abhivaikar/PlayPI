@@ -13,7 +13,6 @@ PlayPI stands out as a versatile, multi-protocol API playground:
 -   **Realistic use cases**: Each API implements meaningful functionalities such as inventory management, task management, user registration, and live chat.
 -   **Offline testing**: No internet connection is required; all APIs run locally.
 -   **Ease of use**: Simple CLI and Docker-based installation options make it beginner-friendly.
--   **Postman collections**: Includes ready-to-use Postman collections for quick testing.
 
 ## **Quick Start Using CLI**
 
