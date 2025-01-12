@@ -1,5 +1,5 @@
 
-# **PlayPI - API Testing Playground**
+# **PlayPI**
 
 PlayPI (pronounced as Play-P-I, similar to API) is an open-source, simple, and local API playground that allows software engineers to test and experiment with various types of APIs. It is designed for hands-on learning and testing without requiring an internet connection. With PlayPI, you can practice API testing across multiple technologies and protocols, including RESTful, gRPC, GraphQL, and WebSocket. You can also use this playground if you are conducting a hands-on API testing workshop or bootcamp.
 
