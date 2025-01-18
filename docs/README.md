@@ -24,7 +24,7 @@ PlayPI stands out as a versatile, multi-protocol API playground:
 2.  Download the binary for your platform (only macOS & Linux supported currently).
 3.  Make the binary executable (if required):
     `chmod +x playpi` 
-    
+
 ### Run the Playground
 Use the following command to start the desired service:
 `./playpi start [api-type]` 
