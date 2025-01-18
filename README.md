@@ -422,6 +422,23 @@ We welcome contributions to make PlayPI even better! Whether it's fixing a bug, 
     -   Click the "Compare & pull request" button.
     -   Describe your changes and submit the pull request.
 
+### Building and running from source locally
+In order to build the source locally, please run below commands:
+```
+# this compiles the binary
+go build -o playpi main.go
+
+# test running the binary
+./playpi start 
+```
+
+### Creating binaries for distribution
+Use Go's cross-compilation feature to build binaries for multiple platforms:
+```
+GOOS=windows GOARCH=amd64 go build -o playpi-windows.exe main.go
+GOOS=darwin GOARCH=amd64 go build -o playpi-mac main.go
+GOOS=linux GOARCH=amd64 go build -o playpi-linux main.go
+```
 ## **Reporting Issues and Feedback**
 
 We value your feedback to improve PlayPI. If you encounter any issues or have suggestions, here's how you can raise them:
