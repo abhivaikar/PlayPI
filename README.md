@@ -45,29 +45,29 @@ Replace `[api-type]` with one of the following:
 If you are a docker fan and prefer not downloading the binary, you can run the playground using a docker image too!
 
 ### Pull the Docker Image
-`docker pull abhivaikar/playpi:latest` 
+`docker pull abhijeetvaikar/playpi:latest` 
 
 ### Run the Playground
 Run a specific API service:
-`docker run -p <port>:<port> abhivaikar/playpi start [api-type]` 
+`docker run -p <port>:<port> abhijeetvaikar/playpi start [api-type]` 
 
 Replace `<port>` and `[api-type]` as needed.
 
 ### Example:
 -   Start RESTful Inventory Manager:
-    `docker run -p 8080:8080 abhivaikar/playpi start restful-inventory-manager`
+    `docker run -p 8080:8080 abhijeetvaikar/playpi start restful-inventory-manager`
 - Start RESTful Task Management API:
-`docker run -p 8085:8085 abhivaikar/playpi start restful-task-manager`
+`docker run -p 8085:8085 abhijeetvaikar/playpi start restful-task-manager`
 - Start GraphQL inventory Management API:
-`docker run -p 8081:8081 abhivaikar/playpi start graphql-inventory-manager`
+`docker run -p 8081:8081 abhijeetvaikar/playpi start graphql-inventory-manager`
 - Start gRPC inventory management API:
-`docker run -p 8082:8082 abhivaikar/playpi start grpc-inventory-manager`
+`docker run -p 8082:8082 abhijeetvaikar/playpi start grpc-inventory-manager`
 - Start gRPC user registration API:
-`docker run -p 8084:8084 abhivaikar/playpi start grpc-user-registration`
+`docker run -p 8084:8084 abhijeetvaikar/playpi start grpc-user-registration`
 - Start websocket inventory manager API:
-`docker run -p 8083:8083 abhivaikar/playpi start websocket-inventory-manager`
+`docker run -p 8083:8083 abhijeetvaikar/playpi start websocket-inventory-manager`
 - Start websocket live chat API:
-`docker run -p 8086:8086 abhivaikar/playpi start websocket-live-chat`
+`docker run -p 8086:8086 abhijeetvaikar/playpi start websocket-live-chat`
 
 ## Accessing a service once started
 Which client you want to use to access the service on the playground is entirely upto you. But here are some suggestions.
