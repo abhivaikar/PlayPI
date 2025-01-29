@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22'
+
+      - name: Run automated tests
+        run: |
+          chmod +x ./graphql/inventory_management/run_tests.sh
+          ./graphql/inventory_management/run_tests.sh
+          chmod +x ./grpc/inventory_management/run_tests.sh
+          ./grpc/inventory_management/run_tests.sh
+          chmod +x ./grpc/user_registration/run_tests.sh
+          ./grpc/user_registration/run_tests.sh
+          chmod +x ./restful/inventory_management/run_tests.sh
+          ./restful/inventory_management/run_tests.sh
+          chmod +x ./restful/task_management/run_tests.sh
+          ./restful/task_management/run_tests.sh
+          chmod +x ./websocket/live_chat/run_tests.sh
+          ./websocket/live_chat/run_tests.sh

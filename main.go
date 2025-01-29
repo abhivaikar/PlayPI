@@ -12,7 +12,6 @@ import (
 	grpcUserRegistration "github.com/abhivaikar/playpi/services/grpc/user_registration"
 	restfulInventory "github.com/abhivaikar/playpi/services/restful/inventory_management"
 	restfulTaskManagement "github.com/abhivaikar/playpi/services/restful/task_management"
-	websocketInventory "github.com/abhivaikar/playpi/services/websocket/inventory_management"
 	websocketLiveChat "github.com/abhivaikar/playpi/services/websocket/live_chat"
 
 	"github.com/spf13/cobra"
@@ -34,7 +33,6 @@ Available options:
 - restful-inventory-manager
 - graphql-inventory-manager
 - grpc-inventory-manager
-- websocket-inventory-manager
 - restful-task-manager
 - grpc-user-registration
 - websocket-live-chat`,
@@ -52,10 +50,6 @@ Available options:
 			case "grpc-inventory-manager":
 				fmt.Println("Starting gRPC API Playground for an inventory management system...")
 				grpcInventory.StartServer()
-			case "websocket-inventory-manager":
-				fmt.Println("Starting WebSocket Playground for an inventory management system...")
-				wsServer := websocketInventory.NewWebSocketServer()
-				wsServer.StartServer()
 			case "restful-task-manager":
 				fmt.Println("Starting RESTful API Playground for a task management system...")
 				restfulTaskManagement.StartServer()
@@ -68,7 +62,7 @@ Available options:
 				wsLiveChatServer.StartServer()
 			default:
 				fmt.Printf("Invalid API type: %s\n", apiType)
-				fmt.Println("Available options: restful-inventory-manager, graphql-inventory-manager, grpc-inventory-manager, websocket-inventory-manager, restful-task-manager, grpc-user-registration, websocket-live-chat")
+				fmt.Println("Available options: restful-inventory-manager, graphql-inventory-manager, grpc-inventory-manager, restful-task-manager, grpc-user-registration, websocket-live-chat")
 			}
 		},
 	}
