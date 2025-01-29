@@ -1,137 +1,107 @@
 package live_chat
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
 
-// ChatMessage represents a single chat message
-type ChatMessage struct {
-	Type     string `json:"type"` // "chat", "system", "private"
-	Username string `json:"username"`
-	Message  string `json:"message"`
-	To       string `json:"to,omitempty"` // For private messages
-}
-
-// WebSocketServer manages chat connections and broadcasts
 type WebSocketServer struct {
-	clients   map[*websocket.Conn]bool
-	users     map[string]*websocket.Conn // Map usernames to connections
-	broadcast chan ChatMessage
-	upgrader  websocket.Upgrader
+	service *ChatService
+	server  *http.Server
 }
 
-// NewWebSocketServer initializes the WebSocketServer
 func NewWebSocketServer() *WebSocketServer {
-	return &WebSocketServer{
-		clients:   make(map[*websocket.Conn]bool),
-		users:     make(map[string]*websocket.Conn),
-		broadcast: make(chan ChatMessage),
-		upgrader: websocket.Upgrader{
-			CheckOrigin: func(r *http.Request) bool {
-				return true // Allow all connections
-			},
-		},
+	server := &WebSocketServer{
+		service: NewChatService(5), // Initialize with a max of 5 users
+	}
+	server.service.StartBroadcastProcessor()
+	return server
+}
+
+func (s *WebSocketServer) StartServer() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/ws", s.HandleConnections)
+
+	s.server = &http.Server{
+		Addr:    ":8086",
+		Handler: mux,
+	}
+
+	log.Println("WebSocket server started on port 8086...")
+	if err := s.server.ListenAndServe(); err != http.ErrServerClosed {
+		log.Fatalf("ListenAndServe(): %v", err)
 	}
 }
 
-// HandleConnections manages incoming WebSocket connections
-func (server *WebSocketServer) HandleConnections(w http.ResponseWriter, r *http.Request) {
-	// Upgrade the connection to WebSocket
-	conn, err := server.upgrader.Upgrade(w, r, nil)
+func (s *WebSocketServer) StopServer() {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := s.server.Shutdown(ctx); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+	log.Println("WebSocket server stopped gracefully")
+}
+
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+func (s *WebSocketServer) HandleConnections(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Printf("WebSocket connection failed: %v", err)
-		return
-	}
-	defer conn.Close()
-
-	// Prompt user to send their username as the first message
-	var username string
-	if err := conn.ReadJSON(&username); err != nil {
-		log.Printf("Failed to read username: %v", err)
+		log.Println("Error upgrading connection:", err)
 		return
 	}
 
-	// Track the connection and username
-	server.clients[conn] = true
-	server.users[username] = conn
-	defer delete(server.clients, conn)   // Remove the connection on disconnect
-	defer delete(server.users, username) // Remove the username on disconnect
-
-	log.Printf("User %s connected", username)
-
-	// Broadcast join notification
-	joinMessage := ChatMessage{
-		Type:     "system",
-		Username: "System",
-		Message:  username + " has joined the chat.",
+	// Register the user with a random username
+	username, err := s.service.RegisterUserWithUsername(conn)
+	if err != nil {
+		log.Println("Error registering user:", err)
+		conn.Close()
+		return
 	}
-	server.broadcast <- joinMessage // Broadcast the join message to all users
+	defer func() {
+		s.service.RemoveUser(username)
+		conn.Close()
+	}()
 
-	// Handle messages from this connection
+	// Inform the client of their assigned username
+	if err := s.sendJSON(conn, map[string]string{"message": "You have connected as " + username}); err != nil {
+		log.Println("Error sending welcome message:", err)
+		return
+	}
+
+	// Listen for incoming messages
 	for {
 		var msg ChatMessage
-		err := conn.ReadJSON(&msg)
-		if err != nil {
-			log.Printf("Error reading message from %s: %v", username, err)
-
-			// Notify others about the user leaving
-			leaveMessage := ChatMessage{
-				Type:     "system",
-				Username: "System",
-				Message:  username + " has left the chat.",
-			}
-			server.broadcast <- leaveMessage // Broadcast the leave message
-			break
-		}
-
-		// Handle the received message (broadcast or private)
-		server.broadcast <- msg
-	}
-}
-
-// HandleMessages listens for incoming messages and broadcasts them
-func (server *WebSocketServer) HandleMessages() {
-	for {
-		msg := <-server.broadcast
-		if msg.Type == "private" && msg.To != "" {
-			// Send private message to the intended recipient
-			if recipientConn, exists := server.users[msg.To]; exists {
-				err := recipientConn.WriteJSON(msg)
-				if err != nil {
-					log.Printf("Error sending private message: %v", err)
-					recipientConn.Close()
-					delete(server.clients, recipientConn)
-					delete(server.users, msg.To)
-				}
+		if err := conn.ReadJSON(&msg); err != nil {
+			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+				log.Println("Connection closed:", err)
 			} else {
-				log.Printf("User %s not found for private message", msg.To)
+				log.Println("Error reading message:", err)
 			}
-		} else {
-			// Broadcast message to all clients
-			for client := range server.clients {
-				err := client.WriteJSON(msg)
-				if err != nil {
-					log.Printf("Error broadcasting message: %v", err)
-					client.Close()
-					delete(server.clients, client)
-				}
+			break // Exit the loop for any error
+		}
+
+		// Delegate message handling to ChatService
+		if err := s.service.HandleMessage(msg, username); err != nil {
+			if sendErr := s.sendJSON(conn, map[string]string{"error": err.Error()}); sendErr != nil {
+				log.Println("Error sending error message:", sendErr)
 			}
 		}
 	}
 }
 
-// StartServer starts the WebSocket server
-func (server *WebSocketServer) StartServer() {
-	http.HandleFunc("/ws", server.HandleConnections)
-
-	go server.HandleMessages()
-
-	log.Println("WebSocket Live Chat server is running on port 8086")
-	err := http.ListenAndServe(":8086", nil)
-	if err != nil {
-		log.Fatalf("WebSocket server failed: %v", err)
-	}
+// sendJSON safely sends a JSON message over a WebSocket connection
+func (s *WebSocketServer) sendJSON(conn *websocket.Conn, v interface{}) error {
+	s.service.writeMu.Lock()
+	defer s.service.writeMu.Unlock()
+	return conn.WriteJSON(v)
 }

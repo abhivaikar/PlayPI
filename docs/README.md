@@ -24,7 +24,7 @@ PlayPI stands out as a versatile, multi-protocol API playground:
 2.  Download the binary for your platform (only macOS & Linux supported currently).
 3.  Make the binary executable (if required):
     `chmod +x playpi` 
-
+    
 ### Run the Playground
 Use the following command to start the desired service:
 `./playpi start [api-type]` 
@@ -94,6 +94,20 @@ Payload:
 }
 ```
 
+**Validation and business rules**
+- Name:
+  - Must be between 3 and 50 characters.
+  - Error: "name must be between 3 and 50 characters"
+- Description:
+  - Cannot exceed 200 characters.
+  - Error: "description cannot exceed 200 characters"
+- Price:
+  - Must be a positive number not exceeding 10,000.
+  - Error: "price must be a positive number not exceeding 10,000"
+- Quantity:
+  - Must be at least 0.
+  - Error: "quantity must be at least 0"
+
 #### Update item
 HTTP Method: `PUT`
 URL: `items/{id}`
@@ -106,10 +120,33 @@ Payload:
 "quantity": 1
 }
 ```
+
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing item.
+  - Error: "item not found"
+- Name:
+  - Must be between 3 and 50 characters.
+  - Error: "name must be between 3 and 50 characters"
+- Description:
+  - Cannot exceed 200 characters.
+  - Error: "description cannot exceed 200 characters"
+- Price:
+  - Must be a positive number not exceeding 10,000.
+  - Error: "price must be a positive number not exceeding 10,000"
+- Quantity:
+  - Must be at least 0.
+  - Error: "quantity must be at least 0"
+
 #### Delete item
 HTTP Method: `DELETE`
 URL: `items/{id}`
 Payload: No payload
+
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing item.
+  - Error: "item not found"
 
 #### Get all items
 HTTP Method: `GET`
@@ -124,6 +161,22 @@ Payload:
 "quantity" : 1
 }
 ```
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing item.
+  - Error: "item not found"
+- Name:
+  - If provided, must be between 3 and 50 characters.
+  - Error: "name must be between 3 and 50 characters"
+- Description:
+  - If provided, cannot exceed 200 characters.
+  - Error: "description cannot exceed 200 characters"
+- Price:
+  - If provided, must be a positive number not exceeding 10,000.
+  - Error: "price must be a positive number not exceeding 10,000"
+- Quantity:
+  - If provided, must be at least 0.
+  - Error: "quantity must be at least 0"
 
 ### RESTful API - Task Management
 Manage tasks with fields such as title, description, due date, and status. Tasks can be marked as overdue based on their due date.
@@ -140,10 +193,26 @@ Payload:
 "priority": "high"
 }
 ```
+**Validation and business rules**
+- Title:
+  - Must be between 3 and 100 characters.
+  - Error: "title must be between 3 and 100 characters"
+- Description:
+  - Cannot exceed 500 characters.
+  - Error: "description cannot exceed 500 characters"
+- Due Date:
+  - Must follow the format YYYY-MM-DD.
+  - Cannot be in the past.
+  - Error: "due date must follow the format YYYY-MM-DD"
+  - Error: "due date cannot be in the past"
+- Priority:
+  - Must be one of: low, medium, high.
+  - Error: "priority must be one of: low, medium, high"
+
 
 #### Update a task
 HTTP Method: `PUT`
-URL: `/tasks/1`
+URL: `/tasks/{id}`
 Payload:
 ```json
 {
@@ -155,23 +224,64 @@ Payload:
 }
 ```
 
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing task.
+  - Error: "task not found"
+- Title:
+  - Must be between 3 and 100 characters.
+  - Error: "title must be between 3 and 100 characters"
+- Description:
+  - Cannot exceed 500 characters.
+  - Error: "description cannot exceed 500 characters"
+- Due Date:
+  - Must follow the format YYYY-MM-DD.
+  - Cannot be in the past.
+  - Error: "due date must follow the format YYYY-MM-DD"
+  - Error: "due date cannot be in the past"
+- Priority:
+  - Must be one of: low, medium, high.
+  - Error: "priority must be one of: low, medium, high"
+
 #### Mark task as complete
 HTTP Method: `PUT`
-URL: `/tasks/1/complete`
+URL: `/tasks/{id}/complete`
 Payload: N/A
+
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing task.
+  - Error: "task not found"
+- Status:
+  - If the task is already marked as completed, return an error.
+  - Error: "task is already marked as completed"
 
 #### Get all tasks
 HTTP Method: `GET`
 URL: `/tasks`
 
+**Validation and business rules**
+- No specific validation rules.
+- If no tasks are created, return a message: "no tasks created"
+
 #### Get a task
 HTTP Method: `GET`
 URL: `/tasks/{id}`
+
+**Validation and business rules**
+-  ID:
+  - Must correspond to an existing task.
+  - Error: "task not found"
+- If no tasks are created, return a message: "no tasks created"
 
 #### Delete a task
 HTTP Method: `DELETE`
 URL: `/tasks/{id}`
 
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing task.
+  - Error: "task not found"
 
 ### gRPC API - Inventory Management
 - Full CRUD support for managing inventory.
@@ -187,6 +297,17 @@ Payload
 "quantity": 12
 }
 ```
+**Validation and business rules**
+- Name:
+  - Must be between 3 and 50 characters.
+- Description:
+  - Cannot exceed 200 characters.
+- Price:
+  - Must be a positive number not exceeding 10,000.
+- Quantity:
+  - Must be at least 0.
+- Error:
+  - If any validation rule is violated, an appropriate error message will be returned.
 
 #### GetItem
 Payload
@@ -195,6 +316,12 @@ Payload
 "id": 1
 }
 ```
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing item.
+- Error:
+  - If the item with the specified ID does not exist, an error message "item not found" will be returned.
+
 #### ListItems
 No payload
 
@@ -209,6 +336,21 @@ Payload
 "quantity": 1800787081
 }
 ```
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing item.
+- Name:
+  - If provided, must be between 3 and 50 characters.
+- Description:
+  - If provided, cannot exceed 200 characters.
+- Price:
+  - If provided, must be a positive number not exceeding 10,000.
+- Quantity:
+  - If provided, must be at least 0.
+- Error:
+  - If the item with the specified ID does not exist, an error message "item not found" will be returned.
+  - If any validation rule is violated, an appropriate error message will be returned.
+
 #### DeleteItem
 Payload
 ```json
@@ -216,6 +358,13 @@ Payload
 "id": 1
 }
 ```
+
+**Validation and business rules**
+- ID:
+  - Must correspond to an existing item.
+- Error:
+  - If the item with the specified ID does not exist, an error message "item not found" will be returned.
+  - If the item has a quantity greater than 0, an error message "cannot delete an item with stock remaining" will be returned.
 
 ### gRPC API - User Registration and Sign-In
 - Register a new user, sign in with a username and password, view profiles, and update/delete account details.
@@ -236,6 +385,21 @@ Payload:
 }
 ```
 
+**Validations and business rules**
+- Username:
+  - Must be between 3 and 50 characters.
+  - Must be unique (no duplicate usernames allowed).
+- Password:
+  - Must be at least 8 characters long.
+- Full Name:
+  - Cannot be empty.
+- Email:
+  - Must be a valid email format.
+- Phone:
+  - Must be numeric and between 10-15 digits.
+- Address:
+  - Cannot exceed 100 characters.
+
 #### SignIn
 Payload:
 ```json
@@ -244,6 +408,11 @@ Payload:
 "username": "testuser"
 }
 ```
+**Validation and business rules**
+- Username and Password:
+  - Both fields are required.
+  - Must match an existing user's credentials.
+
 #### GetProfile
 Payload:
 ```json
@@ -251,6 +420,11 @@ Payload:
 "token": "token_from_signin_response"
 }
 ```
+
+**Validation and business rules**
+- Token:
+  - Must be valid and correspond to an existing session.
+
 #### UpdateProfile
 Payload:
 ```json
@@ -266,6 +440,23 @@ Payload:
  }
 }
 ```
+**Validation and business rules**
+- Token:
+  - Must be valid and correspond to an existing session.
+- Username:
+  - If provided, must be between 3 and 50 characters.
+  - If changed, must be unique.
+- Password:
+  - If provided, must be at least 8 characters long.
+- Full Name:
+  - If provided, cannot be empty.
+- Email:
+  - If provided, must be a valid email format.
+- Phone:
+  - If provided, must be numeric and between 10-15 digits.
+- Address:
+  - If provided, cannot exceed 100 characters.
+
 #### DeleteAccount
 Payload:
 ```json
@@ -274,8 +465,12 @@ Payload:
 }
 ```
 
+**Validation and business rules**
+- Token:
+  - Must be valid and correspond to an existing session.
+
 ### GraphQL API - Inventory management
-Query and mutate inventory data with a flexible schema. Example: Fetch a list of items, retrieve specific details, or update inventory.
+Query and mutate inventory data with a flexible schema.
 
 #### Get all items
 ```
@@ -299,6 +494,10 @@ quantity
 }
 }
 ```
+
+**Validation and business rules**
+- invalid item id will return error "item not found"
+
 #### Add item
 ```
 mutation {
@@ -309,6 +508,18 @@ description
  }
 }
 ```
+
+**Validation and business rules**
+- **Name**:
+  - Must be between 3 and 50 characters.
+  - Must be unique (no duplicate names allowed).
+- **Description**:
+  - Cannot exceed 200 characters.
+- **Price**:
+  - Must be a positive number not exceeding 10,000.
+- **Quantity**:
+  - Must be at least 1.
+
 #### Update item
 ```
 mutation {
@@ -322,6 +533,18 @@ quantity
 }
 ```
 
+**Validation and business rules**
+- **Name**:
+  - Must be between 3 and 50 characters.
+- **Description**:
+  - Cannot exceed 200 characters.
+- **Price**:
+  - Must be a positive number not exceeding 10,000.
+- **Quantity**:
+  - Cannot be negative.
+- **Item id**:
+  - Has to be a valid item id
+
 #### Delete item
 ```
 mutation {
@@ -329,60 +552,27 @@ deleteItem(id: 2)
 }
 ```
 
-### WebSocket API - Inventory Management
-Real-time updates to all connected clients when inventory changes occur.
-
-#### Add item broadcast
-```
-{
-  "type": "add_item",
-  "payload": {
-    "name": "Laptop",
-    "description": "High-performance laptop",
-    "price": 1500.99,
-    "quantity": 10
-  }
-}
-```
-
-#### Get all items
-```
-{
-  "type": "get_all_items"
-}
-```
-
-#### Update an item
-```
-{
-  "type": "update_item",
-  "payload": {
-    "id": 1,
-    "quantity": 20
-  }
-}
-```
-
-#### Delete an item
-```
-{
-  "type": "delete_item",
-  "payload": {
-    "id": 1
-  }
-}
-```
+**Validation and business rules**
+- **Item Not Found**:
+  - If the item with the specified ID does not exist, an error message "item not found" will be returned.
+- **Cannot Delete Item with Stock Remaining**:
+  - If the item has a quantity greater than 0, an error message "cannot delete an item with stock remaining" will be returned.
 
 ### WebSocket API - Live Chat
-Multi-user chat functionality with join/leave notifications and private messaging.
+Multi-user chat functionality with join/leave notifications, public and private messaging.
 
-#### Join a chat
-Send below message to indicate you have joined the chat after connecting to the websocket server. Other clients who have joined will get a broadcast that you have joined the chat.
-```
-"john_doe"
-```
+#### Connect to the chat server as a user
+- Assigns a random username to the client the moment a user connects to the websocket server.
+- Sends a system welcome message to the user immediately post connection.
+- Broadcasts a system message to all existing connected users that a user has joined. Example: "Cherry1737899928256010000 has joined the chat"
+
+**Validation**
+- Max 5 users allowed.
 
 #### Broadcast a message to all chat users
+- Sends a message to all connected users except the sender.
+
+Request payload
 ```
 {
     "type": "chat",
@@ -391,7 +581,13 @@ Send below message to indicate you have joined the chat after connecting to the 
 }
 ```
 
+**Validation**
+- Message type must be "chat".
+- Message or username cannot be empty.
+- Sender does not receive their own message.
+
 #### Send a private message to a specific user
+Request payload
 ```
 {
     "type": "private",
@@ -400,8 +596,16 @@ Send below message to indicate you have joined the chat after connecting to the 
     "to": "jane_doe"
 }
 ```
+
+**Validation**
+- Message type must be "private".
+- recipient must exist.
+- Message cannot be empty.
+- Sender does not receive their own message.
+
 #### Leave chat
 You just need to disconnect from the websocket connection and all other clients connected to the websocket will get a message that you have left.
+Example: "username has left the chat"
 
 ## Contributing to PlayPI
 

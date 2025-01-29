@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22'
+
+      - name: Run GraphQL Inventory Management Tests
+        run: |
+          chmod +x run_tests.sh
+          ./run_tests.sh
+        working-directory: services/graphql/inventory_management
+
+      - name: Run gRPC Inventory Management Tests
+        run: |
+          chmod +x run_tests.sh
+          ./run_tests.sh
+        working-directory: services/grpc/inventory_management
+
+      - name: Run gRPC User Registration Tests
+        run: |
+          chmod +x run_tests.sh
+          ./run_tests.sh
+        working-directory: services/grpc/user_registration
+
+      - name: Run RESTful Inventory Management Tests
+        run: |
+          chmod +x run_tests.sh
+          ./run_tests.sh
+        working-directory: services/restful/inventory_management
+
+      - name: Run RESTful Task Management Tests
+        run: |
+          chmod +x run_tests.sh
+          ./run_tests.sh
+        working-directory: services/restful/task_management
+
+      - name: Run WebSocket Live Chat Tests
+        run: |
+          chmod +x run_tests.sh
+          ./run_tests.sh
+        working-directory: services/websocket/live_chat
