@@ -23,15 +23,15 @@ jobs:
 
       - name: Run automated tests
         run: |
-          chmod +x ./graphql/inventory_management/run_tests.sh
-          ./graphql/inventory_management/run_tests.sh
-          chmod +x ./grpc/inventory_management/run_tests.sh
-          ./grpc/inventory_management/run_tests.sh
-          chmod +x ./grpc/user_registration/run_tests.sh
-          ./grpc/user_registration/run_tests.sh
-          chmod +x ./restful/inventory_management/run_tests.sh
-          ./restful/inventory_management/run_tests.sh
-          chmod +x ./restful/task_management/run_tests.sh
-          ./restful/task_management/run_tests.sh
-          chmod +x ./websocket/live_chat/run_tests.sh
-          ./websocket/live_chat/run_tests.sh
+          chmod +x services/graphql/inventory_management/run_tests.sh
+          .services/graphql/inventory_management/run_tests.sh
+          chmod +x services/grpc/inventory_management/run_tests.sh
+          ./services/grpc/inventory_management/run_tests.sh
+          chmod +x services/grpc/user_registration/run_tests.sh
+          ./services/grpc/user_registration/run_tests.sh
+          chmod +x services/restful/inventory_management/run_tests.sh
+          ./services/restful/inventory_management/run_tests.sh
+          chmod +x services/restful/task_management/run_tests.sh
+          ./services/restful/task_management/run_tests.sh
+          chmod +x services/websocket/live_chat/run_tests.sh
+          ./services/websocket/live_chat/run_tests.sh
