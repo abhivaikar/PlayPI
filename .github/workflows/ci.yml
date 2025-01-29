@@ -24,7 +24,7 @@ jobs:
       - name: Run automated tests
         run: |
           chmod +x services/graphql/inventory_management/run_tests.sh
-          .services/graphql/inventory_management/run_tests.sh
+          ./services/graphql/inventory_management/run_tests.sh
           chmod +x services/grpc/inventory_management/run_tests.sh
           ./services/grpc/inventory_management/run_tests.sh
           chmod +x services/grpc/user_registration/run_tests.sh
