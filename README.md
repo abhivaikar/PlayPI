@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="./docs/_media/icon.svg" alt="PlayPI Icon" width="300"/>
+</p>
 
 # PlayPI
 
