@@ -20,7 +20,7 @@ PlayPI stands out as a versatile, multi-protocol API playground:
 
 ### Download the Binary
 
-1.  Go to the [Releases](https://github.com/abhivaikar/playpi/releases) page of this repository.
+1.  Go to the [Releases](https://github.com/abhivaikar/PlayPI/releases/latest) page of this repository.
 2.  Download the binary for your platform (only macOS & Linux supported currently).
 3.  Make the binary executable (if required):
     `chmod +x playpi` 
@@ -31,10 +31,9 @@ Use the following command to start the desired service:
 
 Replace `[api-type]` with one of the following:
 -   `restful-inventory-manager`
+-   `restful-task-manager`
 -   `graphql-inventory-manager`
 -   `grpc-inventory-manager`
--   `websocket-inventory-manager`
--   `restful-task-manager`
 -   `grpc-user-registration`
 -   `websocket-live-chat`
 
@@ -63,9 +62,7 @@ Replace `<port>` and `[api-type]` as needed.
 - Start gRPC inventory management API:
 `docker run -p 8082:8082 abhijeetvaikar/playpi start grpc-inventory-manager`
 - Start gRPC user registration API:
-`docker run -p 8084:8084 abhijeetvaikar/playpi start grpc-user-registration`
-- Start websocket inventory manager API:
-`docker run -p 8083:8083 abhijeetvaikar/playpi start websocket-inventory-manager`
+`docker run -p 8084:8084 abhivaikar/playpi start grpc-user-registration`
 - Start websocket live chat API:
 `docker run -p 8086:8086 abhijeetvaikar/playpi start websocket-live-chat`
 
